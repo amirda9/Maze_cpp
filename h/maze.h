@@ -15,7 +15,7 @@ class Maze{
 
     private:
         size_t size;
-        // std::vector<std::vector<int>> vec;
+        std::vector<std::vector<char>> vec;
 
         
 };

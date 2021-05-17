@@ -1,5 +1,6 @@
 #include "maze.h"
 #include <iostream>
+#include <vector>
 
 Maze::Maze(){
     std::cout << "Maze constructor is called \n" ;
@@ -15,11 +16,40 @@ std::istream& operator>>(std::istream &input, Maze& M){
 }
 
 void Maze::build(){
+
+
+    for(int i{} ;i<static_cast<int>(this->size) ; i++){
+        std::vector<char> temp;
+        for(int j{} ; j<static_cast<int>(this->size) ; j++){
+            temp.push_back('0');
+        }
+        // std::cout << std::endl << " ";
+        this->vec.push_back(temp);
+    }
+
+    std::cout << " Filled Matrix \n";
+
+    
+
+    // int x = 1;
+	// int y = 4;
+	// char block = '+';
+	// this->vec[ x ][ y ] = block; //set block at 1,4
+	// this->vec[ ++x ][ y ] = block; //set block at 2,4
+	// this->vec[ ++x ][ y ] = block; //set block at 3,4
+	// this->vec[ x ][ --y ] = block; //set block at 3,3
+	// --y; //y = 2
+	// this->vec[ x ][ --y ] = block; //set block at 3,1
+	// this->vec[ x ][ --y ] = block; //set block at 3,0
+	// --x; //x = 2
+	// this->vec[ --x ][ ++y ] = block; //set block at 1,1
+	// this->vec[ --x ][ ++y ] = block; //set block at 0,2	
+    // // std::cout<<"1";
+
     for(int i{} ;i<static_cast<int>(this->size) ; i++){
         for(int j{} ; j<static_cast<int>(this->size) ; j++){
-            std::cout << "0";
+            std::cout << this->vec[i][j];
         }
-        std::cout << std::endl << " ";
+        std::cout << std::endl;
     }
-    // std::cout<<"1";
 }
