@@ -10,6 +10,9 @@ class Maze{
     public:
         Maze();
         // Maze();
+        void dfs();
+        void bfs();
+        void reset();
         void build();
         void show();
         void rand_dfs(int a, int b);
@@ -22,7 +25,8 @@ class Maze{
         std::vector<std::vector<int>> visited;
         int x ;
         int y ;
-        
+        int x_s;
+        int y_s;
 };
 
 
