@@ -126,21 +126,21 @@ void Maze::bfs(){
     while(true){
         if(x_s == static_cast<int>(this->size)-1 && y_s==static_cast<int>(this->size)-1){
             // std::cout << "amir won" << std::endl;
-            this->show();
-        //     for(int i{} ;i<static_cast<int>(this->size) ; i++){
-        // for(int j{} ; j<static_cast<int>(this->size) ; j++){
-        //     if(this->vec[i][j]=='*'){
-        //         std::cout << "\033[31m"<<  this->vec[i][j] << "\033[0m" ;
-        //     }
-        //     else if(this->vec[i][j]=='|'){
-        //         std::cout << "\u001b[34m"<<  this->vec[i][j] << "\u001b[37m" ;
-        //     }
-        //     else{
-        //     std::cout << this->vec[i][j];
-        //     }
-        // }
-        // std::cout << std::endl;
-        //     }
+            // this->show();
+            for(int i{} ;i<static_cast<int>(this->size) ; i++){
+        for(int j{} ; j<static_cast<int>(this->size) ; j++){
+            if(this->vec[i][j]=='*'){
+                std::cout << "\033[32m"<<  this->vec[i][j] << "\033[0m" ;
+            }
+            else if(this->vec[i][j]=='|'){
+                std::cout << "\u001b[34m"<<  this->vec[i][j] << "\u001b[37m" ;
+            }
+            else{
+            std::cout << this->vec[i][j];
+            }
+        }
+        std::cout << std::endl;
+            }
             break;
         }
         if(x_s == static_cast<int>(this->size)-1 ){
@@ -154,7 +154,7 @@ void Maze::bfs(){
         this->vec[x_s][y_s] = '*';
         }
         else if(this->vec[x_s+1][y_s]=='|'){
-            x_s = x_s  ;
+            // x_s = x_s  ;
             y_s = y_s + 1 ; 
         // if(this->vec[x_s+1][y_s]!='|'){
         //     x_s = x_s + 1 ; 
