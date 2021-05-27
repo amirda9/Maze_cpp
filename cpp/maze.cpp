@@ -122,7 +122,7 @@ void Maze::reset(){
 }
 
 void Maze::bfs(){
-    std::cout << "bfs \n" ;
+    std::cout << "\n ---------- bfs ---------- \n" ;
     while(true){
         if(x_s == static_cast<int>(this->size)-1 && y_s==static_cast<int>(this->size)-1){
             // std::cout << "amir won" << std::endl;
@@ -133,7 +133,7 @@ void Maze::bfs(){
                 std::cout << "\033[32m"<<  this->vec[i][j] << "\033[0m" ;
             }
             else if(this->vec[i][j]=='|'){
-                std::cout << "\u001b[34m"<<  this->vec[i][j] << "\u001b[37m" ;
+                std::cout << "\u001b[33m"<<  this->vec[i][j] << "\u001b[37m" ;
             }
             else{
             std::cout << this->vec[i][j];
@@ -168,9 +168,82 @@ void Maze::bfs(){
     }
 }
 
+void Maze::bidirectional(){
+    std::cout << "\n------------ bidirectional ----------- \n";
+    this->reset();
+    x_e = (this->size - 1);
+    y_e = (this->size - 1);
+    // std::cout << "im here" ;
+
+    while(true){
+        // std::cout << x_e << y_e ;
+        if(x_e == x_s && y_e == y_s){
+            // std::cout << "amir won" << std::endl;
+            this->show();
+            break;
+        }
+
+        if(y_s == static_cast<int>(this->size)-1 ){
+        y_s = y_s-1;
+        x_s = x_s + 1 ;
+        this->vec[x_s][y_s] = '*';
+        }
+    if(this->vec[x_s][y_s+1]!='|'){
+        y_s = y_s+1;
+        // std::cout << "to the right -- " << x_s << y_s << std::endl;
+        this->vec[x_s][y_s] = '*';
+    }
+
+    
+
+    else if(this->vec[x_s][y_s+1]=='|'){
+        y_s = y_s - 1 ;
+        x_s = x_s + 1 ; 
+        // if(this->vec[x_s+1][y_s]!='|'){
+        //     x_s = x_s + 1 ; 
+        // }
+        // else{
+        //     y_s = y_s - 1;
+        // }
+        // std::cout << "to the left -- " << x_s << y_s << std::endl;
+        this->vec[x_s][y_s] = '*';
+    }
+
+    if(y_e == 0 ){
+        // break;
+        y_e = y_e + 1;
+        x_e = x_e - 1;
+    //     this->vec[x_e][y_e] = '#';
+    }
+
+    
+    // if(this->vec[x_e][y_e-1]!='|'){
+    //     if(this->y_e > 1) {
+    //         this->y_e = this->y_e-1;
+    //         this->vec[x_e][y_e] = '#';
+    //     }
+    // //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
+    // }
+
+    else if(this->vec[x_e][y_e-1]=='|'){
+        y_e = y_e + 1 ;
+        x_e = x_e - 1 ; 
+    // //     // if(this->vec[x_s+1][y_s]!='|'){
+    // //     //     x_s = x_s + 1 ; 
+    // //     // }
+    // //     // else{
+    // //     //     y_s = y_s - 1;
+    // //     // }
+    // //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
+    // //     this->vec[x_e][y_e] = '#';
+    }
+
+    }
+
+}
 
 void Maze::dfs(){
-    // std::cout << "dfs";
+    std::cout << "\n ---------- dfs ---------- \n" ;
     while(true){
         if(x_s == static_cast<int>(this->size)-1 && y_s==static_cast<int>(this->size)-1){
             // std::cout << "amir won" << std::endl;

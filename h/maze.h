@@ -15,6 +15,7 @@ class Maze{
         void reset();
         void build();
         void show();
+        void bidirectional();
         void rand_dfs(int a, int b);
         void rand_adj(int a , int b);
         friend std::istream& operator>>(std::istream &input, Maze&);
@@ -27,6 +28,8 @@ class Maze{
         int y ;
         int x_s;
         int y_s;
+        int x_e;
+        int y_e;
 };
 
 
