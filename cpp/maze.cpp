@@ -117,6 +117,9 @@ void Maze::reset(){
             if(this->vec[i][j]=='*'){
                 this->vec[i][j] =' ';
             }
+            if(this->visited[i][j]==1){
+                this->visited[i][j] =0;
+            }
         }
     }
 }
@@ -175,46 +178,91 @@ void Maze::bidirectional(){
     y_e = (this->size - 1);
     // std::cout << "im here" ;
 
-    while(true){
-        // std::cout << x_e << y_e ;
-        if(x_e == x_s && y_e == y_s){
-            // std::cout << "amir won" << std::endl;
-            this->show();
+
+
+    for(int i=0 ; i <20 ; i++){
+        if(y_e == 0 ){
+            if(this->vec[x_e-1][y_e]!='|'){
+                x_e = x_e +1 ;
+            }
+            else if(this->vec[x_e-1][y_e]=='|'){
+                y_e = y_e +1 ;
+            }
+        }
+        else{
+
+
+
+            if(x_e == x_s && y_e == y_s){
+            std::cout << "amir won" << std::endl;
+        //     this->show();
+            i = i+100;
             break;
         }
-
-        if(y_s == static_cast<int>(this->size)-1 ){
-        y_s = y_s-1;
-        x_s = x_s + 1 ;
-        this->vec[x_s][y_s] = '*';
+        if(this->vec[x_s][y_s+1]!='|'){
+            y_s = y_s +1 ;
+            this->vec[x_s][y_s] = '*';
         }
-    if(this->vec[x_s][y_s+1]!='|'){
-        y_s = y_s+1;
-        // std::cout << "to the right -- " << x_s << y_s << std::endl;
-        this->vec[x_s][y_s] = '*';
+        else if(this->vec[x_s][y_s+1]=='|'){
+            x_s = x_s + 1 ;
+            this->vec[x_s][y_s] = '*';
+        }
+        if(this->vec[x_e][y_e-1]!='|'){
+            y_e = y_e -1 ;
+            this->vec[x_e][y_e] = '#';
+        }
+        else if(this->vec[x_e][y_e-1]=='|'){
+            x_e = x_e - 1 ;
+            this->vec[x_e][y_e] = '#';
+        }
+
+
+
+        }
+        
     }
+this->show();
+
+    // while(true){
+        // std::cout << x_e << y_e ;
+        // if(x_e == x_s && y_e == y_s){
+        //     // std::cout << "amir won" << std::endl;
+        //     this->show();
+        //     break;
+        // }
+
+    //     if(y_s == static_cast<int>(this->size)-1 ){
+    //     y_s = y_s-1;
+    //     x_s = x_s + 1 ;
+    //     this->vec[x_s][y_s] = '*';
+    //     }
+    // if(this->vec[x_s][y_s+1]!='|'){
+    //     y_s = y_s+1;
+    //     // std::cout << "to the right -- " << x_s << y_s << std::endl;
+    //     this->vec[x_s][y_s] = '*';
+    // }
 
     
 
-    else if(this->vec[x_s][y_s+1]=='|'){
-        y_s = y_s - 1 ;
-        x_s = x_s + 1 ; 
-        // if(this->vec[x_s+1][y_s]!='|'){
-        //     x_s = x_s + 1 ; 
-        // }
-        // else{
-        //     y_s = y_s - 1;
-        // }
-        // std::cout << "to the left -- " << x_s << y_s << std::endl;
-        this->vec[x_s][y_s] = '*';
-    }
+    // else if(this->vec[x_s][y_s+1]=='|'){
+    //     y_s = y_s - 1 ;
+    //     x_s = x_s + 1 ; 
+    //     // if(this->vec[x_s+1][y_s]!='|'){
+    //     //     x_s = x_s + 1 ; 
+    //     // }
+    //     // else{
+    //     //     y_s = y_s - 1;
+    //     // }
+    //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
+    //     this->vec[x_s][y_s] = '*';
+    // }
 
-    if(y_e == 0 ){
-        // break;
-        y_e = y_e + 1;
-        x_e = x_e - 1;
-    //     this->vec[x_e][y_e] = '#';
-    }
+    // if(y_e == 0 ){
+    //     // break;
+    //     y_e = y_e + 1;
+    //     x_e = x_e - 1;
+    // //     this->vec[x_e][y_e] = '#';
+    // }
 
     
     // if(this->vec[x_e][y_e-1]!='|'){
@@ -225,20 +273,20 @@ void Maze::bidirectional(){
     // //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
     // }
 
-    else if(this->vec[x_e][y_e-1]=='|'){
-        y_e = y_e + 1 ;
-        x_e = x_e - 1 ; 
-    // //     // if(this->vec[x_s+1][y_s]!='|'){
-    // //     //     x_s = x_s + 1 ; 
-    // //     // }
-    // //     // else{
-    // //     //     y_s = y_s - 1;
-    // //     // }
-    // //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
-    // //     this->vec[x_e][y_e] = '#';
-    }
+    // else if(this->vec[x_e][y_e-1]=='|'){
+    //     // y_e = y_e + 1 ;
+    //     // x_e = x_e - 1 ; 
+    // // //     // if(this->vec[x_s+1][y_s]!='|'){
+    // // //     //     x_s = x_s + 1 ; 
+    // // //     // }
+    // // //     // else{
+    // // //     //     y_s = y_s - 1;
+    // // //     // }
+    // // //     // std::cout << "to the left -- " << x_s << y_s << std::endl;
+    // // //     this->vec[x_e][y_e] = '#';
+    // }
 
-    }
+    // }
 
 }
 

@@ -5,10 +5,10 @@ int main()
 {
     Maze M;
     std::cin >> M ;
-    M.dfs();
-    M.reset();
-    M.bfs();
-    // M.bidirectional();
+    // M.dfs();
+    // M.reset();
+    // M.bfs();
+    M.bidirectional();
     // Maze M2;
     // std::cin >> M2;
     // srand((unsigned) time(NULL));
