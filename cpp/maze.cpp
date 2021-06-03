@@ -178,50 +178,146 @@ void Maze::bidirectional(){
     y_e = (this->size - 1);
     // std::cout << "im here" ;
 
+    int i = 0 ;
+    while(true){
+        i++;
+        //// won
+        if((x_e == x_s && y_e == y_s) || i ==150 ){
+            std::cout << "amir won" << std::endl;
+            // this->show();
+            // i = i+100;
+            break;
+        }
 
-
-    for(int i=0 ; i <20 ; i++){
-        if(y_e == 0 ){
-            if(this->vec[x_e-1][y_e]!='|'){
-                x_e = x_e +1 ;
+        //////// not won 
+        else{
+            // std::cout << x_s << y_s << x_e << y_e ; 
+            if( y_e == 0 ){
+                if(this->vec[x_e-1][y_e]!='|'){
+                    x_e = x_e -1 ;
+                    this->vec[x_e][y_e] = '#';
             }
             else if(this->vec[x_e-1][y_e]=='|'){
                 y_e = y_e +1 ;
+                
+            }
+
+            }
+            else if(y_s == static_cast<int> ((this->size) - 1)){
+                 if(this->vec[x_s+1][y_s]!='|'){
+                    x_s = x_s +1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
+                }
+                else if(this->vec[x_s+1][y_s]=='|'){
+                    y_s = y_s -1 ;
+                }
+            }
+
+            else{
+                if(this->vec[x_s][y_s+1]!='|'){
+                    if(this->visited[x_s][y_s+1]==2){
+                        break;
+                    }
+                    else if(this->visited[x_s][y_s+1]==0){
+                    this->visited[x_s][y_s+1] = 1;
+                    this->vec[x_s][y_s+1] = '*';
+                    y_s = y_s +1 ;
+                    }
+
+                    else{   
+                        // y_s = y_s +1;
+                    }
+
+                }
+        else {
+            if(this->vec[x_s+1][y_s]!= '|'){
+                if(this->visited[x_s+1][y_s]==2){
+                        break;
+                }
+                else{
+                    x_s = x_s + 1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
+                }
+            }
+            else{
+                if(y_s !=0){
+                // x_s = x_s+1;
+                y_s = y_s -1;
+                this->vec[x_s][y_s] = '*';
+                }
             }
         }
-        else{
-
-
-
-            if(x_e == x_s && y_e == y_s){
-            std::cout << "amir won" << std::endl;
-        //     this->show();
-            i = i+100;
-            break;
-        }
-        if(this->vec[x_s][y_s+1]!='|'){
-            y_s = y_s +1 ;
-            this->vec[x_s][y_s] = '*';
-        }
-        else if(this->vec[x_s][y_s+1]=='|'){
-            x_s = x_s + 1 ;
-            this->vec[x_s][y_s] = '*';
-        }
-        if(this->vec[x_e][y_e-1]!='|'){
+        if((this->vec[x_e][y_e-1]!='|')){
+            // if(this->visited[x_e][y_e-1]==1){
+            //     std::cout << "amir won" << std::endl;
+            //     break;
+            // }
+            if(this->visited[x_e][y_e-1]==0){
+                // std::cout << "\n e to the left \n";
             y_e = y_e -1 ;
             this->vec[x_e][y_e] = '#';
+            this->visited[x_e][y_e] = 2;
+            }
+            else{
+                    if(this->vec[x_e-1][y_e]!= '|'){
+                    x_e = x_e - 1 ;
+                    this->vec[x_e][y_e] = '#';
+                    this->visited[x_e][y_e] = 2;
+                    }
+                    // else{
+                        // if(this->vec[x_e][y_e+1]!= '|'){
+                        //     if(y_e != static_cast<int>(this->size - 1)){
+                        //     y_e = y_e+1;
+                        //     }
+                        //     else{
+                        //         if(this->vec[x_e+1][y_e]!= '|'){
+                        //             x_e = x_e + 1 ;
+                        //             this->vec[x_e][y_e] = '#';
+                        //             this->visited[x_e][y_e] = 2;
+                        //         }
+                        //     }
+
+                        // }
+                    // }
+            }
         }
-        else if(this->vec[x_e][y_e-1]=='|'){
-            x_e = x_e - 1 ;
-            this->vec[x_e][y_e] = '#';
+        else if((this->vec[x_e][y_e-1]=='|')){
+            if(this->vec[x_e-1][y_e]!= '|'){
+                if(this->visited[x_e-1][y_e]==1){
+                        std::cout << "amir won" << std::endl;
+                        break;
+                }
+                else{
+                    x_e = x_e - 1 ;
+                    this->vec[x_e][y_e] = '#';
+                    this->visited[x_e][y_e] = 2;
+                }
+            }
+            // else{
+            //     if(this->vec[x_e][y_e+1]!= '|'){
+            //     y_e = y_e+1;
+            //     this->vec[x_e][y_e] = '#';
+            //     }
+            // }
         }
 
 
 
         }
-        
+        }        
     }
+
+
+
 this->show();
+for(int i{} ;i<static_cast<int>(this->size) ; i++){
+        for(int j{} ; j<static_cast<int>(this->size) ; j++){
+            std::cout << this->visited[i][j];
+        }
+        std::cout << std::endl;
+    }
 
     // while(true){
         // std::cout << x_e << y_e ;
@@ -342,7 +438,7 @@ void Maze::build(){
 
     this->visited[0][0]=1;
     this->vec[0][0]=' ';
-    std::cout << " Filled Matrix \n";
+    std::cout << "Filled Matrix \n";
 
     // this->show();
 

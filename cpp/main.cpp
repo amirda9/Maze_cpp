@@ -6,7 +6,7 @@ int main()
     Maze M;
     std::cin >> M ;
     // M.dfs();
-    // M.reset();
+    M.reset();
     // M.bfs();
     M.bidirectional();
     // Maze M2;
