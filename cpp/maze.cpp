@@ -25,6 +25,9 @@ void Maze::show(){
             if(this->vec[i][j]=='*'){
                 std::cout << "\033[31m"<<  this->vec[i][j] << "\033[0m" ;
             }
+            else if(this->vec[i][j]=='#'){
+                std::cout << "\033[33m"<<  this->vec[i][j] << "\033[0m" ;
+            }
             else if(this->vec[i][j]=='|'){
                 std::cout << "\u001b[34m"<<  this->vec[i][j] << "\u001b[37m" ;
             }
@@ -114,12 +117,12 @@ void Maze::reset(){
     y_s = 0;
     for(int i{} ;i<static_cast<int>(this->size) ; i++){
         for(int j{} ; j<static_cast<int>(this->size) ; j++){
-            if(this->vec[i][j]=='*'){
+            if(this->vec[i][j]=='*' || this->vec[i][j]=='#' || this->vec[i][j]=='H'){
                 this->vec[i][j] =' ';
             }
-            if(this->visited[i][j]==1){
+            // if(this->visited[i][j]==1){
                 this->visited[i][j] =0;
-            }
+            // }
         }
     }
 }
@@ -179,11 +182,15 @@ void Maze::bidirectional(){
     // std::cout << "im here" ;
 
     int i = 0 ;
+    bool ud = false;
+    bool ud2 = false;
     while(true){
         i++;
+        ud = false;
+        ud2 = false;
         //// won
-        if((x_e == x_s && y_e == y_s) || i ==150 ){
-            std::cout << "amir won" << std::endl;
+        if((x_e == x_s && y_e == y_s) || i ==100 ){
+            std::cout << "amir won by i" << std::endl;
             // this->show();
             // i = i+100;
             break;
@@ -194,8 +201,14 @@ void Maze::bidirectional(){
             // std::cout << x_s << y_s << x_e << y_e ; 
             if( y_e == 0 ){
                 if(this->vec[x_e-1][y_e]!='|'){
+                    if(this->visited[x_e-1][y_e]==1){
+                        // std::cout << "amir won" << std::endl;
+                        this->vec[x_e-1][y_e] = 'H';
+                        break;
+                    }
                     x_e = x_e -1 ;
                     this->vec[x_e][y_e] = '#';
+                    this->visited[x_e][y_e] = 2;
             }
             else if(this->vec[x_e-1][y_e]=='|'){
                 y_e = y_e +1 ;
@@ -211,113 +224,237 @@ void Maze::bidirectional(){
                 }
                 else if(this->vec[x_s+1][y_s]=='|'){
                     y_s = y_s -1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
                 }
             }
 
+            //// not a critical point
             else{
                 if(this->vec[x_s][y_s+1]!='|'){
-                    if(this->visited[x_s][y_s+1]==2){
+                    if(this->visited[x_s][y_s+1]==2 ){
+                        this->vec[x_s][y_s+1] = 'H';
                         break;
                     }
                     else if(this->visited[x_s][y_s+1]==0){
-                    this->visited[x_s][y_s+1] = 1;
-                    this->vec[x_s][y_s+1] = '*';
                     y_s = y_s +1 ;
+                    this->visited[x_s][y_s] = 1;
+                    this->vec[x_s][y_s] = '*';
                     }
-
+                    ///// right tested and not the way
                     else{   
-                        // y_s = y_s +1;
-                    }
+                        if(this->visited[x_s+1][y_s]==2 ){
+                        this->vec[x_s+1][y_s] = 'H';
+                        break;
+                        }
+                        else{
+                        if(this->vec[x_s+1][y_s]!= '|'){
+                        x_s = x_s + 1 ;
+                        this->vec[x_s][y_s] = '*';
+                        this->visited[x_s][y_s] = 1;
+                        }
+                        /////// right tested and down is filled
+                        else if(this->vec[x_s][y_s-1]!= '|'){
+                            if(y_s != 0){
+                            y_s = y_s - 1;
+                            this->vec[x_s][y_s] = '*';
+                            this->visited[x_s][y_s] = 1;
+                            }
+                            else{
+                                if(this->vec[x_s-1][y_s]!= '|'){
+                                    x_s = x_s - 1 ;
+                                    this->vec[x_s][y_s] = '*';
+                                    this->visited[x_s][y_s] = 1;
+                                }
+                            }
 
+                        }
+                        
+                    }
+                    }
+                        // y_s = y_s +1;
+                    
                 }
-        else {
-            if(this->vec[x_s+1][y_s]!= '|'){
+                
+        else if(this->vec[x_s][y_s+1]=='|') {
+            if((this->vec[x_s+1][y_s]!= '|') && (this->visited[x_s+1][y_s]==0)){
                 if(this->visited[x_s+1][y_s]==2){
+                        this->vec[x_s+1][y_s+1] = 'H';
                         break;
                 }
                 else{
                     x_s = x_s + 1 ;
                     this->vec[x_s][y_s] = '*';
                     this->visited[x_s][y_s] = 1;
+                    ud = true;
+                    // std::cout << "here" << x_s << y_s;
                 }
+                
             }
-            else{
+            else if(this->vec[x_s-1][y_s]!= '|'){
+                    if(this->visited[x_s-1][y_s]==0){
+                    x_s = x_s - 1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
+                    ud= true;
+                    // std::cout << "here" << x_s << y_s;
+                    }
+                    else{
+                    for(int j = 1 ; j <= x_s ; j++) {
+                            if(this->visited[x_s-j][y_s]==0){
+                                if(this->vec[x_s-j][y_s]!= '|'){
+                                // myboolean =true ;
+                                x_s = x_s - j ;
+                                this->vec[x_s][y_s] = '*';
+                                this->visited[x_s][y_s] = i;
+                                ud = true;
+                                break;
+                                j+=100;
+                                }
+                                else{
+                                    break;
+                                    j+= 100;
+                                }
+                            }
+                        }
+                    }
+        }
+            
+
+            if(!ud){
                 if(y_s !=0){
                 // x_s = x_s+1;
                 y_s = y_s -1;
                 this->vec[x_s][y_s] = '*';
+                this->visited[x_s][y_s] = 1;
                 }
             }
         }
+        
+        
         if((this->vec[x_e][y_e-1]!='|')){
-            // if(this->visited[x_e][y_e-1]==1){
-            //     std::cout << "amir won" << std::endl;
-            //     break;
-            // }
+            if(this->visited[x_e][y_e-1]==1){
+                // std::cout << "amir won" << std::endl;
+                this->vec[x_e][y_e-1] = 'H';
+                break;
+            }
             if(this->visited[x_e][y_e-1]==0){
                 // std::cout << "\n e to the left \n";
             y_e = y_e -1 ;
             this->vec[x_e][y_e] = '#';
             this->visited[x_e][y_e] = 2;
             }
+            ///// left tested but not the way
             else{
                     if(this->vec[x_e-1][y_e]!= '|'){
                     x_e = x_e - 1 ;
                     this->vec[x_e][y_e] = '#';
                     this->visited[x_e][y_e] = 2;
                     }
-                    // else{
-                        // if(this->vec[x_e][y_e+1]!= '|'){
-                        //     if(y_e != static_cast<int>(this->size - 1)){
-                        //     y_e = y_e+1;
-                        //     }
-                        //     else{
-                        //         if(this->vec[x_e+1][y_e]!= '|'){
-                        //             x_e = x_e + 1 ;
-                        //             this->vec[x_e][y_e] = '#';
-                        //             this->visited[x_e][y_e] = 2;
-                        //         }
-                        //     }
 
-                        // }
-                    // }
+                    //// left tested and up is filled
+                    else{
+                        if(this->vec[x_e][y_e+1]!= '|'){
+                            if(y_e != static_cast<int>(this->size - 1)){
+                            y_e = y_e+1;
+                            this->vec[x_e][y_e] = '#';
+                            this->visited[x_e][y_e] = 2;
+                            }
+                            else{
+                                if(this->vec[x_e+1][y_e]!= '|'){
+                                    x_e = x_e + 1 ;
+                                    this->vec[x_e][y_e] = '#';
+                                    this->visited[x_e][y_e] = 2;
+                                }
+                            }
+
+                        }
+                    }
             }
         }
-        else if((this->vec[x_e][y_e-1]=='|')){
-            if(this->vec[x_e-1][y_e]!= '|'){
+        if((this->vec[x_e][y_e-1]=='|')){
+            if((this->vec[x_e-1][y_e]!= '|') && (this->visited[x_e-1][y_e]==0)){
                 if(this->visited[x_e-1][y_e]==1){
-                        std::cout << "amir won" << std::endl;
+                        this->vec[x_e-1][y_e] = 'H';
                         break;
                 }
                 else{
                     x_e = x_e - 1 ;
                     this->vec[x_e][y_e] = '#';
                     this->visited[x_e][y_e] = 2;
+                    ud2 = true;
+                    // std::cout << "here" << x_s << y_s;
+                }
+                
+            }
+            else if(this->vec[x_e+1][y_e]!= '|'){
+                    if(this->visited[x_e+1][y_e]==1){
+                        this->vec[x_e+1][y_e] = 'H';
+                        break;
+                    }
+                    else if(this->visited[x_e+1][y_e]==0){
+                    x_e = x_e+ 1 ;
+                    this->vec[x_e][y_e] = '#';
+                    this->visited[x_e][y_e] = 2;
+                    ud2 = true;
+                    // std::cout << "here" << x_s << y_s;
+                    }
+                    else{
+                    for(int j = 0 ; j < (static_cast<int>(this->size - 1) - x_e) ; j++) {
+                            if(this->visited[x_e+j][y_e]==0){
+                                if(this->vec[x_e+j][y_e]!= '|'){
+                                // myboolean =true ;
+                                x_e = x_e + j ;
+                                this->vec[x_e][y_e] = '#';
+                                this->visited[x_e][y_e] = 2;
+                                ud2 = true;
+                                break;
+                                j+=100;
+                                }
+                                else{
+                                    break;
+                                    j+= 100;
+                                }
+                            }
+                        }
+                    }
+        }
+            
+
+            if(!ud2){
+                if(y_s != static_cast<int>(this->size - 1)){
+                // x_s = x_s+1;
+                y_e = y_e + 1;
+                this->vec[x_e][y_e] = '#';
+                this->visited[x_e][y_e] = 2;
                 }
             }
-            // else{
-            //     if(this->vec[x_e][y_e+1]!= '|'){
-            //     y_e = y_e+1;
-            //     this->vec[x_e][y_e] = '#';
-            //     }
-            // }
         }
 
 
 
-        }
-        }        
-    }
+
+            }
+
+
+
+        }//// not won
+
+
+
+    }///// end of while
+            
+            
 
 
 
 this->show();
-for(int i{} ;i<static_cast<int>(this->size) ; i++){
-        for(int j{} ; j<static_cast<int>(this->size) ; j++){
-            std::cout << this->visited[i][j];
-        }
-        std::cout << std::endl;
-    }
+// for(int i{} ;i<static_cast<int>(this->size) ; i++){
+//         for(int j{} ; j<static_cast<int>(this->size) ; j++){
+//             std::cout << this->visited[i][j];
+//         }
+//         std::cout << std::endl;
+//     }
 
     // while(true){
         // std::cout << x_e << y_e ;
@@ -382,31 +519,85 @@ for(int i{} ;i<static_cast<int>(this->size) ; i++){
     // // //     this->vec[x_e][y_e] = '#';
     // }
 
-    // }
+    
+        }
 
-}
+
 
 void Maze::dfs(){
     std::cout << "\n ---------- dfs ---------- \n" ;
+
+    int i =0 ;
+    // bool myboolean = false;
+    bool ud = false;
     while(true){
-        if(x_s == static_cast<int>(this->size)-1 && y_s==static_cast<int>(this->size)-1){
+        i++;
+        // myboolean = false;
+        ud = false;
+        if((x_s == static_cast<int>(this->size)-1 && y_s==static_cast<int>(this->size)-1) || (i==static_cast<int>(this->size*5))){
             // std::cout << "amir won" << std::endl;
             this->show();
             break;
         }
+        // if(x_s == static_cast<int>(this->size)-1){
+        //     std::cout << "test";
+        // }
         if(y_s == static_cast<int>(this->size)-1 ){
-        y_s = y_s-1;
-        x_s = x_s +1;
-        this->vec[x_s][y_s] = '*';
+                if(this->vec[x_s+1][y_s]!='|'){
+                    x_s = x_s +1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
+                }
+                else if(this->vec[x_s+1][y_s]=='|'){
+                    y_s = y_s -1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = 1;
+                }
+
         }
     if(this->vec[x_s][y_s+1]!='|'){
-        y_s = y_s+1;
-        // std::cout << "to the right -- " << x_s << y_s << std::endl;
-        this->vec[x_s][y_s] = '*';
+        // y_s = y_s+1;
+        // // std::cout << "to the right -- " << x_s << y_s << std::endl;
+        // this->vec[x_s][y_s] = '*';
+                    if(this->visited[x_s][y_s+1]==0){
+                    y_s = y_s +1 ;
+                    this->visited[x_s][y_s] = i;
+                    this->vec[x_s][y_s] = '*';
+                    }
+                    ///// right tested and not the way
+                    else{   
+                        if(this->vec[x_s+1][y_s]!= '|'){
+                        x_s = x_s + 1 ;
+                        this->vec[x_s][y_s] = '*';
+                        this->visited[x_s][y_s] = i;
+                        }
+                        else if(this->vec[x_s-1][y_s]!= '|'){
+                        x_s = x_s - 1 ;
+                        this->vec[x_s][y_s] = '*';
+                        this->visited[x_s][y_s] = i;
+                        }
+                        /////// right tested and down is filled
+                        else if(this->vec[x_s][y_s-1]!= '|'){
+                            if(y_s != 0){
+                            y_s = y_s - 1;
+                            this->vec[x_s][y_s] = '*';
+                            this->visited[x_s][y_s] = i;
+                            }
+                            else{
+                                if(this->vec[x_s-1][y_s]!= '|'){
+                                    x_s = x_s - 1 ;
+                                    this->vec[x_s][y_s] = '*';
+                                    this->visited[x_s][y_s] = i;
+                                }
+                            }
+
+                        }
+                        
+                    }
     }
     else if(this->vec[x_s][y_s+1]=='|'){
-        y_s = y_s - 1 ;
-        x_s = x_s + 1 ; 
+        // y_s = y_s - 1 ;
+        // x_s = x_s + 1 ; 
         // if(this->vec[x_s+1][y_s]!='|'){
         //     x_s = x_s + 1 ; 
         // }
@@ -414,8 +605,65 @@ void Maze::dfs(){
         //     y_s = y_s - 1;
         // }
         // std::cout << "to the left -- " << x_s << y_s << std::endl;
-        this->vec[x_s][y_s] = '*';
+        // this->vec[x_s][y_s] = '*';
+        if((this->vec[x_s+1][y_s]!= '|') && (this->visited[x_s+1][y_s]==0)){
+
+                    x_s = x_s + 1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = i;
+                    ud = true;
+                    // std::cout << "here" << x_s << y_s;
+                
+        }
+        else if(this->vec[x_s-1][y_s]!= '|'){
+                    if(this->visited[x_s-1][y_s]==0){
+                    x_s = x_s - 1 ;
+                    this->vec[x_s][y_s] = '*';
+                    this->visited[x_s][y_s] = i;
+                    ud= true;
+                    // std::cout << "here" << x_s << y_s;
+                    }
+
+                    ///// up is visited and right and down are filled
+                    else{
+                        
+                        for(int j = 1 ; j <= x_s ; j++) {
+                            if(this->visited[x_s-j][y_s]==0){
+                                if(this->vec[x_s-j][y_s]!= '|'){
+                                // myboolean =true ;
+                                x_s = x_s - j ;
+                                this->vec[x_s][y_s] = '*';
+                                this->visited[x_s][y_s] = i;
+                                ud = true;
+                                break;
+                                j+=100;
+                                }
+                                else{
+                                    break;
+                                    j+= 100;
+                                }
+                            }
+                        }
+                        
+                    }
+        }
+        if(!ud) {
+                if(y_s !=0){
+                // x_s = x_s+1;
+                y_s = y_s -1;
+                this->vec[x_s][y_s] = '*';
+                this->visited[x_s][y_s] = i;
+                }
+        }
+
     }
+    }
+
+    for(int i{} ;i<static_cast<int>(this->size) ; i++){
+        for(int j{} ; j<static_cast<int>(this->size) ; j++){
+            std::cout << this->visited[i][j];
+        }
+        std::cout << std::endl;
     }
 }
 
